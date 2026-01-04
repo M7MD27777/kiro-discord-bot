@@ -1,0 +1,4 @@
+node_modules/
+.env
+ticketCounter.json
+warnings.json

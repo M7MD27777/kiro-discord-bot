@@ -29,6 +29,9 @@ function getNextTicketNumber() {
 module.exports = async (interaction) => {
   if (!interaction.customId.startsWith("ticket_modal_")) return;
 
+  // ✅ مهم جدًا لتفادي Unknown interaction
+  await interaction.deferReply({ ephemeral: true });
+
   const guild = interaction.guild;
   const user = interaction.user;
   const type = interaction.customId.replace("ticket_modal_", "");
@@ -44,9 +47,8 @@ module.exports = async (interaction) => {
   );
 
   if (existingTicket) {
-    return interaction.reply({
+    return interaction.editReply({
       content: `❌ You already have an open ticket: ${existingTicket}`,
-      ephemeral: true,
     });
   }
 
@@ -62,10 +64,9 @@ module.exports = async (interaction) => {
   );
 
   if (!category) {
-    return interaction.reply({
+    return interaction.editReply({
       content:
         "❌ Support category not found.\nPlease create a category named **Support** or **Tickets**.",
-      ephemeral: true,
     });
   }
 
@@ -77,10 +78,9 @@ module.exports = async (interaction) => {
   );
 
   if (!staffRole) {
-    return interaction.reply({
+    return interaction.editReply({
       content:
         "❌ Staff role not found.\nPlease create a role named **Staff**.",
-      ephemeral: true,
     });
   }
 
@@ -162,8 +162,8 @@ module.exports = async (interaction) => {
     components: [buttons],
   });
 
-  await interaction.reply({
+  //  الرد النهائي الصحيح
+  await interaction.editReply({
     content: `✅ Your ticket has been created: ${channel}`,
-    ephemeral: true,
   });
 };
